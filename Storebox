@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>StoreBox </title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0A0D14;
+            color: #EDF2F8;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* অথ স্ক্রিন - লগইন/রেজিস্ট্রেশন */
+        .auth-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #0F131C, #0A0D14);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .auth-card {
+            background: rgba(22, 28, 40, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 32px 24px;
+            width: 100%;
+            border: 1px solid rgba(255,159,74,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #FF9F4A, #FF6F2E);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 16px;
+            box-shadow: 0 10px 20px rgba(255,111,46,0.3);
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFE6B3, #FF9F4A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 14px 18px;
+            margin: 10px 0;
+            border-radius: 60px;
+            border: 1px solid rgba(255,200,120,0.2);
+            background: #1A212E;
+            color: white;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: #FF9F4A;
+            background: #222B3A;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(95deg, #FF9F4A, #FF6F2E);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 16px;
+            color: #8E9EBB;
+            cursor: pointer;
+        }
+
+        .auth-switch span {
+            color: #FF9F4A;
+            font-weight: 600;
+        }
+
+        .error-msg {
+            color: #FF6F5E;
+            font-size: 0.75rem;
+            margin-top: -5px;
+            margin-bottom: 8px;
+            padding-left: 12px;
+        }
+
+        /* মূল অ্যাপ কন্টেইনার */
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #0F131C 0%, #0A0D14 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: none;
+        }
+
+        .app-header {
+            background: rgba(15, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 18px 20px 12px;
+            border-bottom: 1px solid rgba(255, 180, 80, 0.2);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #FF9F4A, #FF6F2E);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFE6B3, #FF9F4A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #1A1A2E;
+        }
+
+        .logout-btn {
+            background: rgba(255,100,80,0.2);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 40px;
+            color: #FF9F4A;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px;
+        }
+
+        /* হোম পেজ স্টাইল */
+        .welcome-card {
+            background: linear-gradient(135deg, rgba(255,159,74,0.15), rgba(255,111,46,0.05));
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,159,74,0.3);
+        }
+
+        .greeting-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFD98C;
+        }
+
+        .jokes-card {
+            background: rgba(42, 111, 92, 0.2);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: 1px solid rgba(42, 111, 92, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(30, 38, 52, 0.8);
+            border-radius: 24px;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #FFBD5A;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #FF9F4A, #FF6F2E);
+            border: none;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-weight: 700;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(95deg, #25D366, #128C7E);
+        }
+
+        /* ট্যাব বার */
+        .tab-bar {
+            background: rgba(10, 14, 22, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 16px 20px;
+            border-top: 1px solid rgba(255, 180, 80, 0.2);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #7E8AA8;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .tab-item i { font-size: 22px; }
+        .tab-item.active { color: #FF9F4A; }
+
+        /* প্রোফাইল সেকশন */
+        .profile-avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 16px;
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #FF9F4A;
+            cursor: pointer;
+        }
+
+        .avatar-edit-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #FF9F4A;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .glass-card {
+            background: rgba(22, 28, 40, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .file-item {
+            background: #161E2A;
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .file-title { font-size: 1rem; font-weight: 700; color: #FFD98C; }
+        .file-desc { font-size: 0.75rem; color: #B8C5DD; margin: 6px 0; }
+        .file-preview { background: #0E141F; border-radius: 18px; padding: 10px; text-align: center; margin: 10px 0; }
+        .preview-img { max-width: 100%; max-height: 100px; border-radius: 14px; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            background: #253040;
+            color: white;
+            border: none;
+        }
+
+        .action-btn.open { background: #2A6F5C; }
+        .action-btn.edit { background: #2C6E9E; }
+        .action-btn.delete { background: #A1432F; }
+        .action-btn.share { background: #4A6A3E; }
+
+        .hidden-page { display: none; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(12px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: #1A212E;
+            width: 90%;
+            max-width: 380px;
+            border-radius: 36px;
+            padding: 24px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 40px;
+            border: none;
+            background: #2D384C;
+            color: white;
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #283040;
+        }
+    </style>
+</head>
+<body>
+
+<!-- লগইন/রেজিস্ট্রেশন স্ক্রিন -->
+<div id="authContainer" class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div class="auth-logo-icon"><i class="fas fa-crown"></i></div>
+            <div class="auth-title">StoreBox</div>
+            <div style="color:#8E9EBB; font-size:0.8rem;">প্রিমিয়াম ডিজিটাল ভান্ডার</div>
+        </div>
+
+        <!-- লগইন ফর্ম -->
+        <div id="loginForm">
+            <input type="email" id="loginEmail" class="auth-input" placeholder="ইমেইল">
+            <div id="loginEmailError" class="error-msg"></div>
+            <input type="password" id="loginPassword" class="auth-input" placeholder="পাসওয়ার্ড">
+            <div id="loginPassError" class="error-msg"></div>
+            <button class="auth-btn" id="loginBtn">লগইন করুন</button>
+            <div class="auth-switch" id="showRegister">নতুন ব্যবহারকারী? <span>রেজিস্ট্রেশন করুন</span></div>
+        </div>
+
+        <!-- রেজিস্ট্রেশন ফর্ম (প্রাথমিকভাবে লুকানো) -->
+        <div id="registerForm" style="display:none;">
+            <input type="text" id="regName" class="auth-input" placeholder="আপনার নাম">
+            <div id="regNameError" class="error-msg"></div>
+            <input type="email" id="regEmail" class="auth-input" placeholder="ইমেইল">
+            <div id="regEmailError" class="error-msg"></div>
+            <input type="password" id="regPassword" class="auth-input" placeholder="পাসওয়ার্ড (মিনিমাম ৬ অক্ষর)">
+            <div id="regPassError" class="error-msg"></div>
+            <button class="auth-btn" id="registerBtn">রেজিস্ট্রেশন করুন</button>
+            <div class="auth-switch" id="showLogin">ইতিমধ্যে অ্যাকাউন্ট আছে? <span>লগইন করুন</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- মূল অ্যাপ কন্টেইনার -->
+<div id="appContainer" class="app-container">
+    <div class="app-header">
+        <div class="logo-section">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-crown"></i></div>
+                <span class="logo-text">StoreBox</span>
+                <span class="premium-badge"><i class="fas fa-gem"></i> প্রিমিয়াম</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- হোম পেজ -->
+        <div id="homePage" class="page-content">
+            <div class="welcome-card">
+                <div class="greeting-text" id="greetingText">শুভ সকাল! 👋</div>
+                <div id="userNameDisplay" style="color:#FFD98C; font-size:1.1rem; margin-top:5px;"></div>
+            </div>
+
+            <div class="jokes-card" id="jokeCard">
+                <div style="display: flex; align-items: center;">
+                    <div class="joke-icon"><i class="fas fa-laugh-squint" style="font-size:28px; margin-right:12px;"></i></div>
+                    <div style="flex:1;">
+                        <div class="joke-text" id="jokeText" style="font-size:0.85rem;">লোড হচ্ছে...</div>
+                        <div style="font-size:0.65rem; color:#FFBD5A; margin-top:5px;"><i class="fas fa-sync-alt"></i> ক্লিক করুন নতুন জোকস পেতে</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card"><div><i class="fas fa-folder-open"></i></div><div class="stat-number" id="totalFilesCount">0</div><div class="stat-label">মোট ফাইল</div></div>
+                <div class="stat-card"><div><i class="fas fa-image"></i></div><div class="stat-number" id="totalImagesCount">0</div><div class="stat-label">ছবি/ইমেজ</div></div>
+                <div class="stat-card"><div><i class="fas fa-file-pdf"></i></div><div class="stat-number" id="totalPdfCount">0</div><div class="stat-label">পিডিএফ</div></div>
+                <div class="stat-card"><div><i class="fas fa-file-alt"></i></div><div class="stat-number" id="totalDocCount">0</div><div class="stat-label">ডকুমেন্ট</div></div>
+            </div>
+
+            <button class="btn-primary" id="quickAddHomeBtn"><i class="fas fa-plus-circle"></i> নতুন ফাইল যোগ করুন</button>
+            <button class="btn-primary btn-whatsapp" id="whatsappConnectBtn"><i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপ সাপোর্ট গ্রুপ</button>
+        </div>
+
+        <!-- ফাইলস পেজ -->
+        <div id="filesPage" class="page-content hidden-page">
+            <button class="btn-primary" id="addFileFromFiles"><i class="fas fa-plus"></i> নতুন ফাইল</button>
+            <div id="allFilesContainer"></div>
+        </div>
+
+        <!-- প্রোফাইল পেজ -->
+        <div id="profilePage" class="page-content hidden-page">
+            <div class="glass-card">
+                <div class="profile-avatar-container">
+                    <img id="profileAvatar" class="profile-avatar" src="https://ui-avatars.com/api/?background=FF9F4A&color=fff&size=120&name=ইউজার" alt="প্রোফাইল ছবি">
+                    <div class="avatar-edit-icon" id="changeAvatarBtn"><i class="fas fa-camera"></i></div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                </div>
+                <h3 id="profileName">ব্যবহারকারী</h3>
+                <p id="profileEmail">email@example.com</p>
+                <button id="editProfileInfoBtn" class="action-btn edit" style="width:auto; margin-top:12px;">✏️ প্রোফাইল এডিট</button>
+            </div>
+            <div class="glass-card">
+                <h4><i class="fas fa-chart-line"></i> আপনার পরিসংখ্যান</h4>
+                <div style="display:flex; justify-content:space-between; margin-top:12px;">
+                    <div>📁 মোট ফাইল: <strong id="statProfileFiles">0</strong></div>
+                    <div>⭐ স্টোরেজ: <strong id="storageUsage">0%</strong></div>
+                </div>
+                <div style="background:#2D384C; border-radius:20px; height:6px; margin-top:12px;"><div id="storageBar" style="width:0%; background:#FF9F4A; border-radius:20px; height:6px;"></div></div>
+            </div>
+        </div>
+
+        <!-- সেটিংস পেজ -->
+        <div id="settingsPage" class="page-content hidden-page">
+            <div class="glass-card">
+                <div class="setting-item"><span><i class="fas fa-crown"></i> প্রিমিয়াম স্ট্যাটাস</span> <span style="color:#FFD700;">সক্রিয়</span></div>
+                <div class="setting-item"><span><i class="fas fa-download"></i> ব্যাকআপ নিন</span> <button id="backupBtn" class="action-btn edit">এক্সপোর্ট</button></div>
+                <div class="setting-item"><span><i class="fas fa-upload"></i> রিস্টোর</span> <button id="restoreBtn" class="action-btn open">ইম্পোর্ট</button></div>
+                <div class="setting-item"><span><i class="fas fa-trash"></i> সব ডাটা রিসেট</span> <button id="resetAllBtn" class="action-btn delete">রিসেট</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-bar">
+        <div class="tab-item active" data-page="home"><i class="fas fa-home"></i><span>হোম</span></div>
+        <div class="tab-item" data-page="files"><i class="fas fa-folder-tree"></i><span>ফাইলস</span></div>
+        <div class="tab-item" data-page="profile"><i class="fas fa-user-astronaut"></i><span>প্রোফাইল</span></div>
+        <div class="tab-item" data-page="settings"><i class="fas fa-sliders-h"></i><span>সেটিংস</span></div>
+    </div>
+</div>
+
+<!-- মোডাল -->
+<div id="fileModal" class="modal">
+    <div class="modal-box">
+        <h3 id="modalTitle"><i class="fas fa-plus-circle"></i> নতুন ফাইল</h3>
+        <input type="text" id="fileTitle" placeholder="শিরোনাম *">
+        <textarea id="fileDesc" rows="2" placeholder="বিবরণ"></textarea>
+        <div id="modalFileTrigger" style="background:#2D384C; border-radius:40px; padding:12px; text-align:center; margin:8px 0; cursor:pointer;"><i class="fas fa-cloud-upload-alt"></i> ফাইল আপলোড</div>
+        <input type="file" id="modalFileInput" style="display:none">
+        <span id="selectedFileName" style="font-size:11px;"></span>
+        <input type="hidden" id="editFileId">
+        <div style="display:flex; gap:12px; margin-top:20px;">
+            <button id="modalSave" style="flex:1; background:#FF9F4A; border:none; border-radius:40px; padding:12px;">সংরক্ষণ</button>
+            <button id="modalClose" style="flex:1; background:#3A4455; border:none; border-radius:40px;">বাতিল</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== ইউজার ডাটাবেস (লোকাল স্টোরেজ) ==========
+    let users = [];
+    let currentUser = null;
+    
+    // বর্তমান ইউজারের ফাইল
+    let allFiles = [];
+    
+    // জোকস কালেকশন
+    const jokes = [
+        "😂 শিক্ষক: 'তোর বাবা কী করেন?' শিক্ষার্থী: 'উনি গুগল ম্যাপে কাজ করেন! কারণ উনি সব সময় হারিয়ে যান!'",
+        "🤣 ডাক্তার: 'কেন ওজন কমাতে পারছেন না?' রোগী: 'আমার ফ্রিজের মুরগি আমাকে খেতে বলে!'",
+        "😄 প্রোগ্রামার কেন বিয়ে করে না? কারণ তার ইতিমধ্যে 'কমিটমেন্ট ইস্যু' আছে!",
+        "😆 বাসায় সুপারিশ করে বললাম: 'আমি গরিব মানুষ'! উত্তর: 'আপনার তো ৫ সোলার প্যানেল আছে!'",
+        "🎓 ছাত্র: 'স্যার, আমি কি পরীক্ষায় নকল করতে পারি?' স্যার: 'পারো, তবে তোর নামের জায়গায় 'চার্লি' লিখে দিবি!'"
+    ];
+    let currentJokeIndex = 0;
+    
+    function updateJoke() {
+        currentJokeIndex = (currentJokeIndex + 1) % jokes.length;
+        document.getElementById('jokeText') && (document.getElementById('jokeText').innerHTML = jokes[currentJokeIndex]);
+    }
+    
+    // গ্রীটিং ফাংশন
+    function updateGreeting() {
+        const hour = new Date().getHours();
+        const greetingElem = document.getElementById('greetingText');
+        if(greetingElem) {
+            if(hour < 12) greetingElem.innerHTML = 'শুভ সকাল! ☀️';
+            else if(hour < 18) greetingElem.innerHTML = 'শুভ বিকাল! 🌤️';
+            else greetingElem.innerHTML = 'শুভ সন্ধ্যা! 🌙';
+        }
+    }
+    
+    // ========== অথেনটিকেশন ফাংশন ==========
+    function loadUsers() {
+        const stored = localStorage.getItem("storebox_users");
+        if(stored) users = JSON.parse(stored);
+        else users = [];
+    }
+    
+    function saveUsers() {
+        localStorage.setItem("storebox_users", JSON.stringify(users));
+    }
+    
+    function saveCurrentUser() {
+        localStorage.setItem("storebox_current_user", JSON.stringify(currentUser));
+    }
+    
+    function loadCurrentUser() {
+        const stored = localStorage.getItem("storebox_current_user");
+        if(stored) {
+            currentUser = JSON.parse(stored);
+            if(currentUser) {
+                loadUserFiles();
+                updateUIAfterLogin();
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'flex';
+            }
+        }
+    }
+    
+    function loadUserFiles() {
+        if(currentUser) {
+            const stored = localStorage.getItem(`storebox_files_${currentUser.email}`);
+            allFiles = stored ? JSON.parse(stored) : [];
+        }
+    }
+    
+    function saveUserFiles() {
+        if(currentUser) {
+            localStorage.setItem(`storebox_files_${currentUser.email}`, JSON.stringify(allFiles));
+        }
+        updateStats();
+    }
+    
+    // রেজিস্ট্রেশন
+    function registerUser(name, email, password) {
+        if(users.find(u => u.email === email)) {
+            return { success: false, message: "এই ইমেইল already registered!" };
+        }
+        const newUser = {
+            id: Date.now(),
+            name: name,
+            email: email,
+            password: password,
+            avatarURL: `https://ui-avatars.com/api/?background=FF9F4A&color=fff&size=120&name=${encodeURIComponent(name.split(' ')[0])}`
+        };
+        users.push(newUser);
+        saveUsers();
+        return { success: true, user: newUser };
+    }
+    
+    // লগইন
+    function loginUser(email, password) {
+        const user = users.find(u => u.email === email && u.password === password);
+        if(user) {
+            return { success: true, user: user };
+        }
+        return { success: false, message: "ইমেইল বা পাসওয়ার্ড ভুল!" };
+    }
+    
+    // লগআউট
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem("storebox_current_user");
+        document.getElementById('appContainer').style.display = 'none';
+        document.getElementById('authContainer').style.display = 'flex';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+    }
+    
+    // UI আপডেট লগইনের পর
+    function updateUIAfterLogin() {
+        document.getElementById('profileName').innerText = currentUser.name;
+        document.getElementById('profileEmail').innerText = currentUser.email;
+        document.getElementById('userNameDisplay').innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
+        if(currentUser.avatarURL) {
+            document.getElementById('profileAvatar').src = currentUser.avatarURL;
+        }
+        updateStats();
+        renderFileList();
+        updateGreeting();
+        updateJoke();
+    }
+    
+    // স্ট্যাট আপডেট
+    function updateStats() {
+        const total = allFiles.length;
+        const images = allFiles.filter(f => f.fileType && f.fileType.startsWith("image/")).length;
+        const pdfs = allFiles.filter(f => f.fileType === "application/pdf").length;
+        const docs = total - (images + pdfs);
+        
+        document.getElementById("totalFilesCount") && (document.getElementById("totalFilesCount").innerText = total);
+        document.getElementById("totalImagesCount") && (document.getElementById("totalImagesCount").innerText = images);
+        document.getElementById("totalPdfCount") && (document.getElementById("totalPdfCount").innerText = pdfs);
+        document.getElementById("totalDocCount") && (document.getElementById("totalDocCount").innerText = docs);
+        document.getElementById("statProfileFiles") && (document.getElementById("statProfileFiles").innerText = total);
+        
+        const usagePercent = total > 50 ? 100 : Math.min(Math.floor((total/50)*100),100);
+        document.getElementById("storageUsage") && (document.getElementById("storageUsage").innerText = usagePercent+"%");
+        document.getElementById("storageBar") && (document.getElementById("storageBar").style.width = usagePercent+"%");
+    }
+    
+    // ফাইল লিস্ট রেন্ডার
+    function renderFileList() {
+        const container = document.getElementById("allFilesContainer");
+        if(!container) return;
+        if(allFiles.length === 0) {
+            container.innerHTML = `<div class="glass-card" style="text-align:center;">📭 এখনো কোনো ফাইল নেই</div>`;
+            return;
+        }
+        container.innerHTML = "";
+        [...allFiles].reverse().forEach(file => {
+            let preview = `<div class="file-preview">`;
+            if(file.fileDataURL && file.fileType?.startsWith("image/")) preview += `<img src="${file.fileDataURL}" class="preview-img">`;
+            else if(file.fileDataURL && file.fileType === "application/pdf") preview += `📄 PDF সংযুক্তি`;
+            else if(file.fileDataURL) preview += `📎 ${file.fileName || "ফাইল"}`;
+            else preview += `📝 টেক্সট তথ্য`;
+            preview += `</div>`;
+            const div = document.createElement("div"); div.className = "file-item";
+            div.innerHTML = `<div class="file-title">📌 ${escapeHtml(file.title)}</div><div class="file-desc">${escapeHtml(file.desc) || "কোনো বিবরণ নেই"}</div>${preview}<div class="action-buttons"><button class="action-btn open" data-id="${file.id}"><i class="fas fa-eye"></i> ওপেন</button><button class="action-btn edit" data-id="${file.id}"><i class="fas fa-edit"></i> এডিট</button><button class="action-btn delete" data-id="${file.id}"><i class="fas fa-trash"></i> ডিলিট</button><button class="action-btn share" data-id="${file.id}"><i class="fas fa-share-alt"></i> শেয়ার</button></div>`;
+            container.appendChild(div);
+        });
+        attachFileEvents();
+    }
+    
+    function attachFileEvents() {
+        document.querySelectorAll('.action-btn.open').forEach(btn => btn.onclick = () => openFile(parseInt(btn.dataset.id)));
+        document.querySelectorAll('.action-btn.edit').forEach(btn => btn.onclick = () => openEdit(parseInt(btn.dataset.id)));
+        document.querySelectorAll('.action-btn.delete').forEach(btn => btn.onclick = () => { if(confirm("মুছবেন?")) { allFiles = allFiles.filter(f => f.id !== parseInt(btn.dataset.id)); saveUserFiles(); renderFileList(); updateStats(); } });
+        document.querySelectorAll('.action-btn.share').forEach(btn => btn.onclick = () => shareFile(parseInt(btn.dataset.id)));
+    }
+    
+    function openFile(id) { const f = allFiles.find(f=>f.id===id); if(!f) return; if(f.fileDataURL) { if(f.fileType?.startsWith("image/")) { const w=window.open(); w.document.write(`<img src="${f.fileDataURL}" style="max-width:100%;">`); } else if(f.fileType==="application/pdf") window.open(f.fileDataURL,'_blank'); else { const a=document.createElement('a'); a.href=f.fileDataURL; a.download=f.fileName||"file"; a.click(); } } else alert("কোনো ফাইল নেই"); }
+    function shareFile(id) { const f = allFiles.find(f=>f.id===id); if(navigator.share) navigator.share({ title: f.title }); else alert(`"${f.title}" শেয়ার করুন`); }
+    
+    // প্রোফাইল ছবি পরিবর্তন
+    document.getElementById('changeAvatarBtn')?.addEventListener('click', () => document.getElementById('avatarInput').click());
+    document.getElementById('avatarInput')?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                currentUser.avatarURL = ev.target.result;
+                saveCurrentUser();
+                document.getElementById('profileAvatar').src = currentUser.avatarURL;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // প্রোফাইল তথ্য এডিট
+    document.getElementById('editProfileInfoBtn')?.addEventListener('click', () => {
+        const newName = prompt("আপনার নাম লিখুন:", currentUser.name);
+        if(newName && newName.trim()) {
+            currentUser.name = newName;
+            saveCurrentUser();
+            document.getElementById('profileName').innerText = currentUser.name;
+            document.getElementById('userNameDisplay').innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
+        }
+    });
+    
+    // ফাইল মোডাল
+    const modal = document.getElementById("fileModal");
+    let currentFileData=null, currentFileName="", currentFileType="";
+    document.getElementById("modalFileTrigger")?.addEventListener("click", () => document.getElementById("modalFileInput").click());
+    document.getElementById("modalFileInput")?.addEventListener("change", (e) => { const f=e.target.files[0]; if(f) { currentFileName=f.name; currentFileType=f.type; const reader=new FileReader(); reader.onload=ev=>currentFileData=ev.target.result; reader.readAsDataURL(f); document.getElementById("selectedFileName").innerText=`✅ ${f.name}`; } });
+    function resetModal() { document.getElementById("fileTitle").value=""; document.getElementById("fileDesc").value=""; document.getElementById("editFileId").value=""; currentFileData=null; currentFileName=""; document.getElementById("selectedFileName").innerText=""; document.getElementById("modalFileInput").value=""; document.getElementById("modalTitle").innerHTML="<i class='fas fa-plus-circle'></i> নতুন ফাইল"; }
+    function openEdit(id) { const f=allFiles.find(f=>f.id===id); if(f) { document.getElementById("fileTitle").value=f.title; document.getElementById("fileDesc").value=f.desc||""; document.getElementById("editFileId").value=f.id; currentFileData=f.fileDataURL; currentFileName=f.fileName; currentFileType=f.fileType; document.getElementById("selectedFileName").innerText=currentFileName?`📎 ${currentFileName}`:""; document.getElementById("modalTitle").innerHTML="<i class='fas fa-edit'></i> ফাইল এডিট"; modal.style.display="flex"; } }
+    document.getElementById("addFileFromFiles")?.addEventListener("click", ()=>{ resetModal(); modal.style.display="flex"; });
+    document.getElementById("quickAddHomeBtn")?.addEventListener("click", ()=>{ resetModal(); modal.style.display="flex"; });
+    document.getElementById("modalSave")?.addEventListener("click", () => { const title=document.getElementById("fileTitle").value.trim(); if(!title) return alert("শিরোনাম দিন"); const desc=document.getElementById("fileDesc").value; const editId=document.getElementById("editFileId").value; if(editId) { const idx=allFiles.findIndex(f=>f.id==editId); if(idx!==-1){ allFiles[idx].title=title; allFiles[idx].desc=desc; if(currentFileData){ allFiles[idx].fileDataURL=currentFileData; allFiles[idx].fileName=currentFileName; allFiles[idx].fileType=currentFileType; } } } else { allFiles.push({ id: Date.now(), title, desc, fileDataURL: currentFileData, fileName: currentFileName, fileType: currentFileType }); } saveUserFiles(); renderFileList(); updateStats(); modal.style.display="none"; resetModal(); });
+    document.getElementById("modalClose")?.addEventListener("click", () => { modal.style.display="none"; resetModal(); });
+    
+    // ব্যাকআপ ও রিস্টোর
+    document.getElementById("backupBtn")?.addEventListener("click", () => { const data={files:allFiles, profile:currentUser}; const blob=new Blob([JSON.stringify(data)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download="storebox_backup.json"; a.click(); URL.revokeObjectURL(url); });
+    document.getElementById("restoreBtn")?.addEventListener("click", () => { const inp=document.createElement('input'); inp.type='file'; inp.accept='application/json'; inp.onchange=e=>{ const file=e.target.files[0]; const reader=new FileReader(); reader.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); if(data.files) { allFiles=data.files; saveUserFiles(); renderFileList(); updateStats(); } if(data.profile && data.profile.email===currentUser.email) { currentUser=data.profile; saveCurrentUser(); updateUIAfterLogin(); } alert("রিস্টোর সফল!"); }catch(e){alert("ভুল ফাইল");} }; reader.readAsText(file); }; inp.click(); });
+    document.getElementById("resetAllBtn")?.addEventListener("click", () => { if(confirm("সব ফাইল রিসেট করবেন?")){ allFiles=[]; saveUserFiles(); renderFileList(); updateStats(); } });
+    
+    // হোয়াটসঅ্যাপ
+    function connectToWhatsApp() { window.open("https://wa.me/8801972470256?text=হ্যালো! আমি StoreBox থেকে যোগাযোগ করছি।", '_blank'); }
+    document.getElementById("whatsappConnectBtn")?.addEventListener("click", connectToWhatsApp);
+    
+    // পেজ সুইচ
+    function switchPage(page) { document.querySelectorAll(".page-content").forEach(p=>p.classList.add("hidden-page")); document.getElementById(`${page}Page`).classList.remove("hidden-page"); document.querySelectorAll(".tab-item").forEach(t=>t.classList.remove("active")); document.querySelector(`.tab-item[data-page="${page}"]`).classList.add("active"); if(page==="files") renderFileList(); }
+    document.querySelectorAll(".tab-item").forEach(tab=>tab.onclick=()=>switchPage(tab.dataset.page));
+    
+    function escapeHtml(str){ if(!str) return ""; return str.replace(/[&<>]/g, m=>({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+    
+    // ========== লগইন/রেজিস্ট্রেশন ইভেন্ট ==========
+    loadUsers();
+    loadCurrentUser();
+    
+    document.getElementById("showRegister")?.addEventListener("click", () => { document.getElementById("loginForm").style.display = "none"; document.getElementById("registerForm").style.display = "block"; });
+    document.getElementById("showLogin")?.addEventListener("click", () => { document.getElementById("registerForm").style.display = "none"; document.getElementById("loginForm").style.display = "block"; });
+    
+    document.getElementById("loginBtn")?.addEventListener("click", () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        if(!email) { document.getElementById("loginEmailError").innerText = "ইমেইল দিন"; return; }
+        if(!password) { document.getElementById("loginPassError").innerText = "পাসওয়ার্ড দিন"; return; }
+        const result = loginUser(email, password);
+        if(result.success) {
+            currentUser = result.user;
+            saveCurrentUser();
+            loadUserFiles();
+            updateUIAfterLogin();
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            switchPage("home");
+        } else {
+            document.getElementById("loginPassError").innerText = result.message;
+        }
+    });
+    
+    document.getElementById("registerBtn")?.addEventListener("click", () => {
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value;
+        let valid = true;
+        if(!name) { document.getElementById("regNameError").innerText = "নাম দিন"; valid=false; }
+        if(!email) { document.getElementById("regEmailError").innerText = "ইমেইল দিন"; valid=false; }
+        if(!password || password.length<6) { document.getElementById("regPassError").innerText = "পাসওয়ার্ড ৬ অক্ষরের হতে হবে"; valid=false; }
+        if(valid) {
+            const result = registerUser(name, email, password);
+            if(result.success) {
+                alert("রেজিস্ট্রেশন সফল! এখন লগইন করুন।");
+                document.getElementById("registerForm").style.display = "none";
+                document.getElementById("loginForm").style.display = "block";
+                document.getElementById("loginEmail").value = email;
+                document.getElementById("regName").value = "";
+                document.getElementById("regEmail").value = "";
+                document.getElementById("regPassword").value = "";
+            } else {
+                document.getElementById("regEmailError").innerText = result.message;
+            }
+        }
+    });
+    
+    document.getElementById("logoutBtn")?.addEventListener("click", logout);
+    
+    // ইন্টারভাল
+    setInterval(updateJoke, 10000);
+    document.getElementById("jokeCard")?.addEventListener("click", updateJoke);
+</script>
+</body>
+</html>
